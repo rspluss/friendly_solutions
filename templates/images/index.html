@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <h1>List images</h1>
             <div class="col-md-12 text-end">
-                <button type="button" class="btn btn-primary">Add Image</button>
+                <button type="button" class="btn btn-primary" onclick="location.href='{% url 'images:add_image' %}'">Add Image</button>
             </div>
             <table class="table  text-center">
               <thead>
@@ -31,8 +31,8 @@
                   <td>{{ image.color }}</td>
                   <td>{{ image.image }}</td>
                   <td>
-                      <a href="">Update</a>
-                      <a href="">Delete</a>
+                      <a href="{% url 'images:update_image' image.id %}">Update</a>
+                      <a href="{% url 'images:delete_image' image.id %}">Delete</a>
                   </td>
                 </tr>
               {% endfor %}
