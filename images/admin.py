@@ -1,3 +1,12 @@
 from django.contrib import admin
+from images.models import Image, Album
 
-# Register your models here.
+
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title', 'album', 'width', 'height', 'color', 'image']
+
+
+@admin.register(Album)
+class AlbumAdmin(admin.ModelAdmin):
+    list_display = ['album_id']

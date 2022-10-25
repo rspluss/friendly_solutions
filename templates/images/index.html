@@ -2,8 +2,42 @@
 {% block content %}
 <div class="container">
     <div class="row my-3">
-        <div class="col-md-10">
-            <p>cześć</p>
+        <div class="col-md-12">
+            <h1>List images</h1>
+            <div class="col-md-12 text-end">
+                <button type="button" class="btn btn-primary">Add Image</button>
+            </div>
+            <table class="table  text-center">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Album</th>
+                  <th scope="col">Width</th>
+                  <th scope="col">Height</th>
+                  <th scope="col">Color</th>
+                  <th scope="col">URL</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for image in images %}
+                <tr>
+                  <th scope="row">{{ image.id }}</th>
+                  <td>{{ image.title }}</td>
+                  <td>{{ image.album }}</td>
+                  <td>{{ image.width }}</td>
+                  <td>{{ image.height }}</td>
+                  <td>{{ image.color }}</td>
+                  <td>{{ image.image }}</td>
+                  <td>
+                      <a href="">Update</a>
+                      <a href="">Delete</a>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
         </div>
     </div>
 </div>
