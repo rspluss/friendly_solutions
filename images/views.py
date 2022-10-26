@@ -1,8 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.http import JsonResponse
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 
 from images.models import Image
 from images.forms import AddImageForm
+from images.serializers import ImageSerializer
+
 from PIL import Image as ImageSize
 from colorthief import ColorThief
 
@@ -54,3 +61,17 @@ def update_image(request, id_image):
 
     context = {'form': form}
     return render(request, "images/forms/edit_image.html", context)
+
+
+@api_view(['GET', 'POST'])
+def image_list_rest(request):
+    if request.method == "GET":
+        images = Image.objects.all()
+        serializer = ImageSerializer(images, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    if request.method == "POST":
+        serializer = ImageSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
