@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+
 from images.models import Image
 from images.forms import AddImageForm
+from PIL import Image as ImageSize
+from colorthief import ColorThief
 
 
 def home(request):
@@ -13,10 +16,20 @@ def home(request):
 
 def add_image(request):
     if request.method == "POST":
-        form = AddImageForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "The photo has been correctly added")
+        data = request.POST
+        image = request.FILES.get('image')
+        image_size = ImageSize.open(image)
+        ct = ColorThief(image)
+        dominant_color = ct.get_color(quality=1)
+
+        add_new_image = Image.objects.create(
+            title=data['title'],
+            album=data['album'],
+            width=image_size.size[0],
+            height=image_size.size[1],
+            color=dominant_color,
+            image=image
+        )
     form = AddImageForm()
 
     context = {'form': form}

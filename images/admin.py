@@ -6,7 +6,3 @@ from images.models import Image, Album
 class ImageAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'album', 'width', 'height', 'color', 'image']
 
-
-@admin.register(Album)
-class AlbumAdmin(admin.ModelAdmin):
-    list_display = ['album_id']

@@ -10,7 +10,7 @@ class Album(models.Model):
 
 class Image(models.Model):
     title = models.CharField(max_length=200)
-    album = models.ForeignKey(Album, models.DO_NOTHING, blank=True, null=True)
+    album = models.CharField(max_length=5, blank=True, null=True)
     width = models.CharField(max_length=20)
     height = models.CharField(max_length=20)
     color = models.CharField(max_length=20)
