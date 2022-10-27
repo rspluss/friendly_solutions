@@ -23,7 +23,7 @@ def home(request):
     images = Image.objects.all().order_by('-id')
 
     #Set up Pagination
-    p = Paginator(images, 3)
+    p = Paginator(images, 20)
     page = request.GET.get('page')
     images_p = p.get_page(page)
 
@@ -34,9 +34,9 @@ def home(request):
 def add_image(request):
     if request.method == "POST":
         data = request.POST
-        image_url = data['image_url']
+        image_url = data['url']
         image_name = image_url.split("/")[-1]
-        response = requests.get(image_url + '.jpg')
+        response = requests.get(image_url)
         obj = Image()
         obj.image.save(image_name, ContentFile(response.content), save=False)
 
@@ -45,7 +45,7 @@ def add_image(request):
         dominant_color = ct.get_color(quality=1)
 
         obj.title = data['title']
-        obj.album = data['album']
+        obj.album = data['albumId']
         obj.width = image_size.size[0],
         obj.height = image_size.size[1],
         obj.color = dominant_color,
@@ -85,24 +85,24 @@ def image_list_rest(request):
 
     if request.method == "POST":
         data = request.data
-        image_url = data['image_url']
-        image_name = image_url.split("/")[-1]
-        response = requests.get(image_url + '.jpg')
-        obj = Image()
-        obj.image.save(image_name, ContentFile(response.content), save=False)
+        for n in range(len(data)):
+            image_url = data[n]['url']
+            image_name = image_url.split("/")[-1]
+            response = requests.get(image_url + ".jpg")
+            obj = Image()
+            obj.image.save(image_name, ContentFile(response.content), save=False)
 
-        image_size = ImageSize.open(obj.image)
-        ct = ColorThief(obj.image)
-        dominant_color = ct.get_color(quality=1)
+            image_size = ImageSize.open(obj.image)
+            ct = ColorThief(obj.image)
+            dominant_color = ct.get_color(quality=1)
 
-        obj.title = data['title']
-        obj.album = data['album']
-        obj.width = image_size.size[0],
-        obj.height = image_size.size[1],
-        obj.color = dominant_color,
-        obj.save()
-        serializer = ImageSerializer(data=request.data)
-        if serializer.is_valid():
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            obj.title = data[n]['title']
+            obj.albumId = data[n]['albumId']
+            obj.width = image_size.size[0],
+            obj.height = image_size.size[1],
+            obj.color = dominant_color,
+            obj.save()
+
+        return Response(status=status.HTTP_201_CREATED)
 
 

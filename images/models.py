@@ -10,10 +10,10 @@ class Album(models.Model):
 
 class Image(models.Model):
     title = models.CharField(max_length=200)
-    album = models.CharField(max_length=5, blank=True, null=True)
+    albumId = models.CharField(max_length=5, blank=True, null=True)
     width = models.CharField(max_length=20)
     height = models.CharField(max_length=20)
     color = models.CharField(max_length=20)
     image = models.FileField(upload_to='content', null=True, blank=True)
-    image_url = models.URLField(null=True)
+    url = models.URLField(null=True)
 
