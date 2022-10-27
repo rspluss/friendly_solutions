@@ -14,4 +14,6 @@ class Image(models.Model):
     width = models.CharField(max_length=20)
     height = models.CharField(max_length=20)
     color = models.CharField(max_length=20)
-    image = models.ImageField(upload_to='content', null=True, blank=True)
+    image = models.FileField(upload_to='content', null=True, blank=True)
+    image_url = models.URLField(null=True)
+
