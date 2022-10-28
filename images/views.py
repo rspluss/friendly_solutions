@@ -46,7 +46,7 @@ def add_image(request):
         dominant_color = ct.get_color(quality=1)
 
         obj.title = data['title']
-        obj.album = data['albumId']
+        obj.albumId = data['albumId']
         obj.width = image_size.size[0],
         obj.height = image_size.size[1],
         obj.color = dominant_color,
@@ -126,7 +126,7 @@ def image_list_json_file(request):
         dominant_color = ct.get_color(quality=1)
 
         obj.title = files[index]['title']
-        obj.album = files[index]['albumId']
+        obj.albumId = files[index]['albumId']
         obj.width = image_size.size[0],
         obj.height = image_size.size[1],
         obj.color = dominant_color,
