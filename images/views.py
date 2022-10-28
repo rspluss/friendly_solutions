@@ -17,6 +17,7 @@ from PIL import Image as ImageSize
 from colorthief import ColorThief
 
 import requests
+import ast
 
 
 def home(request):
@@ -106,3 +107,30 @@ def image_list_rest(request):
         return Response(status=status.HTTP_201_CREATED)
 
 
+def image_list_json_file(request):
+    with open("static/photos.txt") as f:
+        files = ast.literal_eval(f.read())
+
+    for index in range(len(files)):
+        for key in files[index]:
+            print(files[index][key])
+
+        image_url = files[index]['url']
+        image_name = image_url.split("/")[-1]
+        response = requests.get(image_url + ".jpg")
+        obj = Image()
+        obj.image.save(image_name, ContentFile(response.content), save=False)
+
+        image_size = ImageSize.open(obj.image)
+        ct = ColorThief(obj.image)
+        dominant_color = ct.get_color(quality=1)
+
+        obj.title = files[index]['title']
+        obj.album = files[index]['albumId']
+        obj.width = image_size.size[0],
+        obj.height = image_size.size[1],
+        obj.color = dominant_color,
+        obj.save()
+
+    context = {}
+    return render(request, "images/index.html", context)
